@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { FavoritesProvider } from './src/context/FavoritesContext';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import HomeScreen from './src/screens/HomeScreen';
 import CourseListScreen from './src/screens/CourseListScreen';
 import CourseDetailScreen from './src/screens/CourseDetailScreen';
@@ -56,6 +57,7 @@ const FavoritesStack = () => (
 
 const MenuModal = ({ visible, onClose, navigation }) => {
   const { user, logout } = useAuth();
+  const { theme, isDark, toggleTheme } = useTheme();
   
   return (
     <Modal
@@ -69,7 +71,7 @@ const MenuModal = ({ visible, onClose, navigation }) => {
         activeOpacity={1} 
         onPress={onClose}
       >
-        <View style={styles.menuContainer}>
+        <View style={[styles.menuContainer, { backgroundColor: theme.card }]}>
           <View style={styles.menuHeader}>
             <Feather name="user" size={48} color="white" style={styles.menuHeaderIcon} />
             <Text style={styles.menuHeaderName}>{user?.name}</Text>
@@ -84,8 +86,8 @@ const MenuModal = ({ visible, onClose, navigation }) => {
                 onClose();
               }}
             >
-              <Feather name="home" size={24} color={colors.gray900} />
-              <Text style={styles.menuItemText}>Home</Text>
+              <Feather name="home" size={24} color={theme.text} />
+              <Text style={[styles.menuItemText, { color: theme.text }]}>Home</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -95,8 +97,8 @@ const MenuModal = ({ visible, onClose, navigation }) => {
                 onClose();
               }}
             >
-              <Feather name="book" size={24} color={colors.gray900} />
-              <Text style={styles.menuItemText}>All Courses</Text>
+              <Feather name="book" size={24} color={theme.text} />
+              <Text style={[styles.menuItemText, { color: theme.text }]}>All Courses</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -106,20 +108,32 @@ const MenuModal = ({ visible, onClose, navigation }) => {
                 onClose();
               }}
             >
-              <Feather name="search" size={24} color={colors.gray900} />
-              <Text style={styles.menuItemText}>Search</Text>
+              <Feather name="search" size={24} color={theme.text} />
+              <Text style={[styles.menuItemText, { color: theme.text }]}>Search</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                toggleTheme();
+              }}
+            >
+              <Feather name={isDark ? "sun" : "moon"} size={24} color={theme.text} />
+              <Text style={[styles.menuItemText, { color: theme.text }]}>
+                {isDark ? 'Light Mode' : 'Dark Mode'}
+              </Text>
             </TouchableOpacity>
           </View>
           
           <TouchableOpacity 
-            style={styles.logoutButton}
+            style={[styles.logoutButton, { backgroundColor: theme.backgroundSecondary }]}
             onPress={() => {
               logout();
               onClose();
             }}
           >
-            <Feather name="log-out" size={20} color={colors.gray900} />
-            <Text style={styles.logoutText}>Logout</Text>
+            <Feather name="log-out" size={20} color={theme.text} />
+            <Text style={[styles.logoutText, { color: theme.text }]}>Logout</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -130,6 +144,7 @@ const MenuModal = ({ visible, onClose, navigation }) => {
 const AppTabs = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [navigation, setNavigation] = useState(null);
+  const { theme } = useTheme();
 
   return (
     <>
@@ -137,13 +152,14 @@ const AppTabs = () => {
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
-          tabBarInactiveTintColor: colors.gray400,
+          tabBarInactiveTintColor: theme.textSecondary,
           tabBarStyle: {
             paddingBottom: 12,
             paddingTop: 8,
             height: 70,
             borderTopWidth: 1,
-            borderTopColor: colors.gray200,
+            borderTopColor: theme.border,
+            backgroundColor: theme.card,
           },
         }}
       >
@@ -228,7 +244,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   menuContainer: {
-    backgroundColor: colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingBottom: 40,
@@ -267,13 +282,11 @@ const styles = StyleSheet.create({
   menuItemText: {
     fontSize: 16,
     fontWeight: '500',
-    color: colors.gray900,
     marginLeft: 16,
   },
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.gray100,
     padding: 16,
     marginHorizontal: 16,
     borderRadius: 8,
@@ -281,17 +294,18 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.gray900,
     marginLeft: 12,
   },
 });
 
 export default function App() {
   return (
-    <AuthProvider>
-      <FavoritesProvider>
-        <Navigation />
-      </FavoritesProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <Navigation />
+        </FavoritesProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

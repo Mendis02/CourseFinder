@@ -2,16 +2,18 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
+import { useTheme } from '../context/ThemeContext';
 import { colors } from '../styles/styles';
 
 const CourseCard = ({ course, onPress }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { theme } = useTheme();
   const favorite = isFavorite(course.id);
 
   return (
     <TouchableOpacity 
       onPress={onPress}
-      style={styles.card}
+      style={[styles.card, { backgroundColor: theme.card }]}
     >
       {/* Course Image */}
       <View style={styles.imageContainer}>
@@ -41,15 +43,15 @@ const CourseCard = ({ course, onPress }) => {
 
       {/* Course Info */}
       <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={2}>
+        <Text style={[styles.title, { color: theme.text }]} numberOfLines={2}>
           {course.title}
         </Text>
         
-        <Text style={styles.description} numberOfLines={2}>
+        <Text style={[styles.description, { color: theme.textSecondary }]} numberOfLines={2}>
           {course.description}
         </Text>
 
-        <Text style={styles.instructor}>
+        <Text style={[styles.instructor, { color: theme.textSecondary }]}>
           {course.instructor}
         </Text>
 
@@ -57,16 +59,16 @@ const CourseCard = ({ course, onPress }) => {
         <View style={styles.statsRow}>
           <View style={styles.ratingContainer}>
             <Text style={styles.star}>★</Text>
-            <Text style={styles.rating}>
+            <Text style={[styles.rating, { color: theme.text }]}>
               {course.rating}
             </Text>
-            <Text style={styles.reviews}>
+            <Text style={[styles.reviews, { color: theme.textSecondary }]}>
               ({course.reviews.toLocaleString()})
             </Text>
           </View>
 
           <View style={styles.priceContainer}>
-            <Text style={styles.students}>
+            <Text style={[styles.students, { color: theme.textSecondary }]}>
               {course.students.toLocaleString()} students
             </Text>
             <Text style={styles.price}>
@@ -95,7 +97,6 @@ const CourseCard = ({ course, onPress }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.white,
     borderRadius: 12,
     marginBottom: 16,
     shadowColor: colors.black,
@@ -155,17 +156,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.gray900,
     marginBottom: 4,
   },
   description: {
     fontSize: 14,
-    color: colors.gray600,
     marginBottom: 8,
   },
   instructor: {
-    fontSize: 12,
-    color: colors.gray500,
+    fontSize: 13,
     marginBottom: 12,
   },
   statsRow: {

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
 import CourseCard from '../components/CourseCard';
 import { categories, featuredCourses } from '../data/courses';
 import { colors } from '../styles/styles';
 
 const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundSecondary }]}>
       <ScrollView style={styles.scrollView}>
         {/* Header */}
         <View style={styles.header}>
@@ -25,15 +27,15 @@ const HomeScreen = ({ navigation }) => {
           {/* Search Bar */}
           <TouchableOpacity 
             onPress={() => navigation?.navigate('Search')}
-            style={styles.searchBar}
+            style={[styles.searchBar, { backgroundColor: theme.card }]}
           >
-            <Text style={styles.searchText}>🔍 Search for courses...</Text>
+            <Text style={[styles.searchText, { color: theme.textSecondary }]}>🔍 Search for courses...</Text>
           </TouchableOpacity>
         </View>
 
         {/* Categories */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+          <Text style={[styles.sectionTitle, { color: theme.text }]}>
             Categories
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -68,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
         {/* Featured Courses */}
         <View style={styles.coursesSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>
               Featured Courses
             </Text>
             <TouchableOpacity onPress={() => navigation?.navigate('Courses')}>
@@ -92,7 +94,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.gray50,
   },
   scrollView: {
     flex: 1,
@@ -134,14 +135,12 @@ const styles = StyleSheet.create({
     color: colors.primaryLight,
   },
   searchBar: {
-    backgroundColor: colors.white,
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
   searchText: {
-    color: colors.gray400,
     fontSize: 16,
     flex: 1,
   },
@@ -152,7 +151,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.gray900,
     marginBottom: 16,
   },
   categoryItem: {
