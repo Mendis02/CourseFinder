@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { courses } from '../data/courses';
+import { useFavorites } from '../context/FavoritesContext';
 import { colors } from '../styles/styles';
 
 const CourseDetailScreen = ({ route, navigation }) => {
   const { courseId } = route?.params || {};
   const course = courses.find(c => c.id === courseId);
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(courseId);
 
   if (!course) {
     return (
@@ -19,9 +23,22 @@ const CourseDetailScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: course.image }} style={styles.image} resizeMode="cover" />
+          <View style={[styles.imagePlaceholder, { backgroundColor: course.color || colors.primary }]}>
+            <Text style={styles.placeholderText}>{course.category}</Text>
+          </View>
           <TouchableOpacity onPress={() => navigation?.goBack()} style={styles.backButton}>
-            <Text style={styles.backText}>← Back</Text>
+            <Feather name="arrow-left" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            onPress={() => toggleFavorite(courseId)} 
+            style={styles.favoriteButton}
+          >
+            <Feather 
+              name={favorite ? "heart" : "heart"} 
+              size={24} 
+              color={favorite ? "#EF4444" : "white"}
+              fill={favorite ? "#EF4444" : "transparent"}
+            />
           </TouchableOpacity>
         </View>
 
@@ -117,9 +134,41 @@ const styles = StyleSheet.create({
   scrollView: { flex: 1 },
   emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   emptyText: { color: colors.gray500 },
-  imageContainer: { position: 'relative' },
+  imageContainer: { position: 'relative', height: 224 },
+  imagePlaceholder: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
   image: { width: '100%', height: 224 },
-  backButton: { position: 'absolute', top: 48, left: 16, backgroundColor: colors.white, borderRadius: 20, padding: 8 },
+  backButton: { 
+    position: 'absolute', 
+    top: 48, 
+    left: 16, 
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', 
+    borderRadius: 20, 
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  favoriteButton: { 
+    position: 'absolute', 
+    top: 48, 
+    right: 16, 
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', 
+    borderRadius: 20, 
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   backText: { fontSize: 16 },
   content: { padding: 20 },
   badgeRow: { flexDirection: 'row', marginBottom: 12 },

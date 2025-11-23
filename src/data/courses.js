@@ -1,10 +1,10 @@
 export const categories = [
-  { id: '1', name: 'Programming', icon: '💻', color: '#3B82F6' },
-  { id: '2', name: 'Design', icon: '🎨', color: '#EC4899' },
-  { id: '3', name: 'Business', icon: '💼', color: '#10B981' },
-  { id: '4', name: 'Marketing', icon: '📊', color: '#F59E0B' },
-  { id: '5', name: 'Photography', icon: '📷', color: '#8B5CF6' },
-  { id: '6', name: 'Music', icon: '🎵', color: '#EF4444' },
+  { id: '1', name: 'Programming', icon: 'code', color: '#3B82F6' },
+  { id: '2', name: 'Design', icon: 'layers', color: '#EC4899' },
+  { id: '3', name: 'Business', icon: 'briefcase', color: '#10B981' },
+  { id: '4', name: 'Marketing', icon: 'trending-up', color: '#F59E0B' },
+  { id: '5', name: 'Photography', icon: 'camera', color: '#8B5CF6' },
+  { id: '6', name: 'Music', icon: 'music', color: '#EF4444' },
 ];
 
 export const courses = [

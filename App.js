@@ -6,10 +6,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { FavoritesProvider } from './src/context/FavoritesContext';
 import HomeScreen from './src/screens/HomeScreen';
 import CourseListScreen from './src/screens/CourseListScreen';
 import CourseDetailScreen from './src/screens/CourseDetailScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import FavoritesScreen from './src/screens/FavoritesScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import { colors } from './src/styles/styles';
@@ -41,6 +43,13 @@ const CoursesStack = () => (
 const SearchStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="SearchMain" component={SearchScreen} />
+    <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+  </Stack.Navigator>
+);
+
+const FavoritesStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="FavoritesMain" component={FavoritesScreen} />
     <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
   </Stack.Navigator>
 );
@@ -130,9 +139,11 @@ const AppTabs = () => {
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.gray400,
           tabBarStyle: {
-            paddingBottom: 8,
+            paddingBottom: 12,
             paddingTop: 8,
-            height: 60,
+            height: 70,
+            borderTopWidth: 1,
+            borderTopColor: colors.gray200,
           },
         }}
       >
@@ -159,6 +170,13 @@ const AppTabs = () => {
           component={SearchStack}
           options={{
             tabBarIcon: ({ color, size }) => <Feather name="search" size={size} color={color} />,
+          }}
+        />
+        <Tab.Screen 
+          name="Favorites" 
+          component={FavoritesStack}
+          options={{
+            tabBarIcon: ({ color, size }) => <Feather name="heart" size={size} color={color} />,
           }}
         />
         <Tab.Screen 
@@ -271,7 +289,9 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <AuthProvider>
-      <Navigation />
+      <FavoritesProvider>
+        <Navigation />
+      </FavoritesProvider>
     </AuthProvider>
   );
 }

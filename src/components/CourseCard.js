@@ -1,8 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useFavorites } from '../context/FavoritesContext';
 import { colors } from '../styles/styles';
 
 const CourseCard = ({ course, onPress }) => {
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(course.id);
+
   return (
     <TouchableOpacity 
       onPress={onPress}
@@ -18,6 +23,20 @@ const CourseCard = ({ course, onPress }) => {
             {course.category}
           </Text>
         </View>
+        <TouchableOpacity 
+          style={styles.favoriteButton}
+          onPress={(e) => {
+            e.stopPropagation();
+            toggleFavorite(course.id);
+          }}
+        >
+          <Feather 
+            name={favorite ? "heart" : "heart"} 
+            size={20} 
+            color={favorite ? "#EF4444" : "white"}
+            fill={favorite ? "#EF4444" : "transparent"}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Course Info */}
@@ -118,6 +137,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: colors.primary,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     padding: 16,

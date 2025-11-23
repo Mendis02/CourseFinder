@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import CourseCard from '../components/CourseCard';
 import { categories, featuredCourses } from '../data/courses';
 import { colors } from '../styles/styles';
@@ -54,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
                 <View 
                   style={[styles.categoryIcon, { backgroundColor: category.color + '20' }]}
                 >
-                  <Text style={styles.categoryEmoji}>{category.icon}</Text>
+                  <Feather name={category.icon} size={28} color={category.color} />
                 </View>
                 <Text style={styles.categoryName}>
                   {category.name}
@@ -165,9 +166,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
-  },
-  categoryEmoji: {
-    fontSize: 24,
   },
   categoryName: {
     fontSize: 12,
